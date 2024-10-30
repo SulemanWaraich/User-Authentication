@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { CgMenu, CgCloseR } from "react-icons/cg";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Button } from "../styles/Button";
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
+  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
   const Nav = styled.nav`
     .navbar-list {
       display: flex;
+      align-items: center;
       gap: 4.8rem;
 
       li {
@@ -123,7 +127,8 @@ const Navbar = () => {
             <NavLink
               className="navbar-link"
               onClick={() => setOpenMenu(false)}
-              to="/">
+              to="/"
+            >
               Home
             </NavLink>
           </li>
@@ -131,7 +136,8 @@ const Navbar = () => {
             <NavLink
               className="navbar-link"
               onClick={() => setOpenMenu(false)}
-              to="/about">
+              to="/about"
+            >
               About
             </NavLink>
           </li>
@@ -139,7 +145,8 @@ const Navbar = () => {
             <NavLink
               className="navbar-link"
               onClick={() => setOpenMenu(false)}
-              to="/service">
+              to="/service"
+            >
               Services
             </NavLink>
           </li>
@@ -147,10 +154,26 @@ const Navbar = () => {
             <NavLink
               className="navbar-link"
               onClick={() => setOpenMenu(false)}
-              to="/contact">
+              to="/contact"
+            >
               Contact
             </NavLink>
           </li>
+          {isAuthenticated ? (
+            <li>
+              <Button
+                onClick={() =>
+                  logout({ logoutParams: { returnTo: window.location.origin } })
+                }
+              >
+                LogOut
+              </Button>
+            </li>
+          ) : (
+            <li>
+              <Button onClick={() => loginWithRedirect()}>LogIn</Button>
+            </li>
+          )}
         </ul>
         {/* //nav icon */}
         <div className="mobile-navbar-btn">
